@@ -41,10 +41,17 @@ echo "Downloading $uuid4_url"
   cd nginx-${NGINX_VERSION}
   ./configure \
     --with-pcre=pcre-${PCRE_VERSION} \
+    --with-pcre-jit \
     --with-zlib=zlib-${ZLIB_VERSION} \
+    --http-client-body-temp-path=/var/tmp/client_body_temp \
+    --http-proxy-temp-path=/var/tmp/proxy_temp \
     --with-http_gzip_static_module \
     --with-http_realip_module \
+    --with-http_gunzip_module \
+    --with-http_slice_module \
     --with-http_ssl_module \
+    --with-http_sub_module \
+    --with-http_v2_module \
     --prefix=/tmp/nginx \
     --add-module=${temp_dir}/nginx-${NGINX_VERSION}/headers-more-nginx-module-${HEADERS_MORE_VERSION} \
     --add-module=${temp_dir}/nginx-${NGINX_VERSION}/nginx-uuid4-module-${UUID4_VERSION}
