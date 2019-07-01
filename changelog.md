@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased] - YYYY-MM-DD
 
+## [1.13.1] - 2024-12-26
+### Changes KELISTO
+- Add new binary files with extra nginx modules required for our application configuration.
+
 ## [1.13] - 2024-08-30
 ### Changes
 - Update Nginx to 1.26.2

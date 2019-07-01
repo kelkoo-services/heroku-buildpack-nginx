@@ -31,6 +31,10 @@ curl -sSL "$headers_more_nginx_module_url" | tar xvz -C "nginx-${NGINX_VERSION}"
 echo "Downloading $uuid4_url"
 curl -sSL "$uuid4_url" | tar xvz -C "nginx-${NGINX_VERSION}"
 
+# Added some extra modules
+# zlib is now linked against system zlib (https://github.com/heroku/heroku-buildpack-nginx/commit/ac4cabbfa6726d226c5bb66a9cfabd617dab1cad#diff-c534e9cf066b9bcde8adf030c1789df3ac08c8ce9ebbb12e999eacb38aca4bf6L47)
+# pcre-jit can speed up regex matching (https://nginx.org/en/docs/ngx_core_module.html#pcre_jit)
+
 configure_opts=(
   --with-pcre
   --with-http_gzip_static_module
@@ -38,6 +42,13 @@ configure_opts=(
   --with-http_ssl_module
   --add-module="${temp_dir}/nginx-${NGINX_VERSION}/headers-more-nginx-module-${HEADERS_MORE_VERSION}"
   --add-module="${temp_dir}/nginx-${NGINX_VERSION}/nginx-uuid4-module-${UUID4_VERSION}"
+  --with-pcre-jit
+  --http-client-body-temp-path="/var/tmp/client_body_temp"
+  --http-proxy-temp-path="/var/tmp/proxy_temp"
+  --with-http_gunzip_module
+  --with-http_slice_module
+  --with-http_sub_module
+  --with-http_v2_module
 )
 if [[ $STACK == heroku-2[02] ]]; then
   # we used to build our own PCRE 8.x, and when moving to dynamic linking, we had to ensure all existing regexes in config files continued to work, so we enforced libpcre3 (8.x) usage instead of the newer PCRE2 (10.x), which has stricter validation for certain patterns (example: /[\w-.]/ is not allowed in PCRE2)
